@@ -21,8 +21,8 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         # Send message back to client
         data = Fetcher('^GDAXI', [2016,1,1], [2017,1,1])
         d = data.getHistorical()
-        d.to_json('data.csv')
-        f = open('data.csv', 'r')
+        d.to_json('/usr/src/data_fetched.csv')
+        f = open('/usr/src/data_fetched.csv', 'r')
         # Write content as utf-8 data
         self.wfile.write(f.read().encode('utf-8'))
         f.close()
