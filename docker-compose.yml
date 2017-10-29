@@ -1,14 +1,14 @@
 version: '3'
 services:
     exchange-api:
-        image: eimma-exchange-api
+        image: elmma-exchange-api
         volumes:
             - ./exchange-api:/usr/src/app
         ports:
             - "8080:8080"
-        container_name: eimma-exchange-api
+        container_name: elmma-exchange-api
         networks:
-            - adept-nw
+            - elmma-nw
 
 networks:
-    adept-nw:
+    elmma-nw:
