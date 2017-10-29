@@ -1,5 +1,9 @@
 # eimma
 
+## Run all services
+
+To run all services the docker-compose.yml file consists of, type `docker-compose up -d` (-d means running in daemon mode)
+
 ## Serve the Exchange Api
 
 To build the docker exchange-api image, `docker build -t eimma-exchange-api -f eimma/exchange-api/Dockerfile .`
