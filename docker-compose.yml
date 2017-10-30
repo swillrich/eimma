@@ -1,7 +1,10 @@
 version: '3'
 services:
     exchange-api:
-        image: elmma-exchange-api
+        build: 
+            context: exchange-api
+            dockerfile: Dockerfile
+        image: elmma-exchange-api        
         volumes:
             - ./exchange-api:/usr/src/app
         ports:
@@ -9,6 +12,20 @@ services:
         container_name: elmma-exchange-api
         networks:
             - elmma-nw
+    elmma:
+        build: 
+            context: elmma
+            dockerfile: Dockerfile
+        image: elmma
+        volumes:
+            - ./elmma:/usr/src/app
+            - ../.m2:/root/.m2
+        ports:
+            - "8081:8080"
+        container_name: elmma
+        networks:
+            - elmma-nw     
+        
 
 networks:
     elmma-nw:
