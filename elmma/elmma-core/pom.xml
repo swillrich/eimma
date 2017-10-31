@@ -1,0 +1,127 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>elmma-core</artifactId>
+	<packaging>jar</packaging>
+	<name>elmma-core</name>
+
+	<properties>
+		<main.basedir>${project.basedir}/../</main.basedir>
+		<start-class>de.elmma.App</start-class>
+		<lombok.version>1.14.8</lombok.version>
+		<log4jdbc.log4j2.version>1.16</log4jdbc.log4j2.version>
+		<rest.assured.version>2.3.3</rest.assured.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>mvnrepository.com</id>
+			<url>https://mvnrepository.com/artifact</url>
+		</repository>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+		<repository>
+			<id>d-maven</id>
+			<url>http://d-maven.googlecode.com/svn/trunk/repo</url>
+		</repository>
+	</repositories>
+
+	<scm><!-- DELETE THIS LINE -->
+		<url>https://github.com/making/spring-boot-blank</url><!-- DELETE THIS 
+			LINE -->
+		<connection>scm:git:git@github.com:making/spring-boot-blank.git</connection><!-- 
+			DELETE THIS LINE -->
+		<developerConnection>scm:git:git@github.com:making/spring-boot-blank.git</developerConnection><!-- 
+			DELETE THIS LINE -->
+	</scm><!-- DELETE THIS LINE -->
+
+	<distributionManagement><!-- DELETE THIS LINE -->
+		<snapshotRepository><!-- DELETE THIS LINE -->
+			<id>ossrh</id><!-- DELETE THIS LINE -->
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url><!-- 
+				DELETE THIS LINE -->
+		</snapshotRepository><!-- DELETE THIS LINE -->
+		<repository><!-- DELETE THIS LINE -->
+			<id>ossrh</id><!-- DELETE THIS LINE -->
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url><!-- 
+				DELETE THIS LINE -->
+		</repository><!-- DELETE THIS LINE -->
+	</distributionManagement><!-- DELETE THIS LINE -->
+
+
+
+	<dependencies>
+		<dependency>
+			<artifactId>elmma-model</artifactId>
+			<groupId>${groupId}</groupId>
+			<version>${version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.lukehutch</groupId>
+			<artifactId>fast-classpath-scanner</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+			<version>${log4jdbc.log4j2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.sven-jacobs</groupId>
+			<artifactId>loremipsum</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.restassured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest.assured.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<parent>
+		<groupId>de.elmma</groupId>
+		<artifactId>elmma</artifactId>
+		<version>0.1.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+</project>

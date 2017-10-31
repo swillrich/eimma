@@ -1,6 +1,21 @@
 version: '3'
 services:
-    exchange-api:
+    db:
+        image: mysql:latest
+        volumes:
+            - .\mysql:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: elmma
+            MYSQL_USER: elmma
+            MYSQL_PASSWORD: 123456
+        ports:
+            - "3306:3306"
+        container_name: elmma-db
+        networks:
+            - elmma-nw
+
+    exchange-api:        
         build: 
             context: exchange-api
             dockerfile: Dockerfile
@@ -12,6 +27,7 @@ services:
         container_name: elmma-exchange-api
         networks:
             - elmma-nw
+            
     elmma:
         build: 
             context: elmma
