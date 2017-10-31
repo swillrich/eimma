@@ -21,7 +21,7 @@ services:
             - ./elmma:/usr/src/app
             - ../.m2:/root/.m2
         ports:
-            - "8081:8080"
+            - "3000:8080"
         container_name: elmma
         networks:
             - elmma-nw     
