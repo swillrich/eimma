@@ -7,11 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class App {
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args);
-		try {
-			new TestDataGenerator();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new PriceFetcher();
 	}
 }

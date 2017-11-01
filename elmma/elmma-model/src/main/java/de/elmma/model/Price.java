@@ -1,13 +1,15 @@
 package de.elmma.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,29 +18,22 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "T_USER")
+@Table(name = "T_PRICE")
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Price {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 	@NonNull
-	@Enumerated(EnumType.STRING)
-	@Column(name = "gender")
-	private Gender gender;
+	@Column(name = "underlying", nullable = false)
+	private String underlying;
 	@NonNull
-	@Column(name = "prename", length = 100)
-	private String prename;
+	@Column(name = "datetime", nullable = false, columnDefinition = "DATETIME")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date date;
 	@NonNull
-	@Column(name = "surname", length = 100)
-	private String surname;
-	@NonNull
-	@Column(name = "mail", length = 255)
-	private String mail;
-	@Column(name = "password")
-	private String password;
-	@Column(name = "salt")
-	private String salt;
+	@Column(name = "price")
+	private double price;
 }

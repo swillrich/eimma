@@ -5,6 +5,7 @@ from yahoo_historical import Fetcher
 from urllib.parse import urlparse, parse_qs
 import jsonpickle
 from yahoo_finance import Share
+import traceback
 
 def extract_var(var, query):
   return str(query[var]).replace('[','').replace(']','').replace('\'','')
@@ -27,13 +28,14 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         self.send_header('Content-type','text/json')
         self.end_headers()
         
-        query = parse_qs(urlparse(self.path).query)
+        try:
+          query = parse_qs(urlparse(self.path).query)
         
-        if "favicon.ico" in self.path:
+          if "favicon.ico" in self.path:
             self.wfile.write("no variables given".encode('utf-8'))
             return
     
-        if "history" in self.path:        
+          if "history" in self.path:        
             #https://github.com/lukaszbanasiak/yahoo-finance
             ticker = extract_var("ticker", query)
             f = extract_date("from", query)
@@ -52,13 +54,14 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
             f.close()
             return
 
-        if "snapshot" in self.path:
+          if "snapshot" in self.path:
             ticker = extract_var('ticker', query)
             share = Share(ticker)
             self.wfile.write(jsonpickle.encode(share).encode('utf-8'))
-            return
-            
-        self.wfile.write((self.path + ": route not known").encode('utf-8'))
+
+        except:
+          self.wfile.write(traceback.format_exc().encode('utf-8'))
+          
         return
  
 def run():

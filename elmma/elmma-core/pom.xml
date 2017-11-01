@@ -50,13 +50,16 @@
 		</repository><!-- DELETE THIS LINE -->
 	</distributionManagement><!-- DELETE THIS LINE -->
 
-
-
 	<dependencies>
 		<dependency>
 			<artifactId>elmma-model</artifactId>
 			<groupId>${groupId}</groupId>
 			<version>${version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20171018</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.lukehutch</groupId>

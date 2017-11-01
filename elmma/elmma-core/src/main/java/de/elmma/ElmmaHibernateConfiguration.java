@@ -12,7 +12,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
-import de.elmma.model.Project;
+import de.elmma.model.Price;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 
 public class ElmmaHibernateConfiguration extends Configuration {
@@ -34,7 +34,7 @@ public class ElmmaHibernateConfiguration extends Configuration {
 		ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
 		scanner.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
 
-		for (BeanDefinition bd : scanner.findCandidateComponents(Project.class.getPackage().toString())) {
+		for (BeanDefinition bd : scanner.findCandidateComponents(Price.class.getPackage().toString())) {
 			String name = bd.getBeanClassName();
 			try {
 				classes.add(Class.forName(name));
