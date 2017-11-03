@@ -6,6 +6,8 @@ from urllib.parse import urlparse, parse_qs
 import jsonpickle
 from yahoo_finance import Share
 import traceback
+from lxml import html
+import requests
 
 def extract_var(var, query):
   return str(query[var]).replace('[','').replace(']','').replace('\'','')
@@ -15,6 +17,9 @@ def extract_date(var, query):
   aa = a.split('-')
   arr = [int(aa[0]),int(aa[1]),int(aa[2])]
   return arr
+  
+def returnValueAsString(tree, input):
+    return (str(tree.xpath(input)) + str("\"")).replace("]","").replace("[","").replace("'","")
  
 # HTTPRequestHandler class
 class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
@@ -55,9 +60,13 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
             return
 
           if "snapshot" in self.path:
-            ticker = extract_var('ticker', query)
-            share = Share(ticker)
-            self.wfile.write(jsonpickle.encode(share).encode('utf-8'))
+            page = requests.get('http://www.xetra.com/xetra-de/')
+            tree = html.fromstring(page.content)
+            price = "{ \"price\":\"" + returnValueAsString(tree, '//*[@id="idmsChartLast"]/text()')
+            time = ",\"time\":\"" + returnValueAsString(tree, '//*[@id="idmsChartTime"]/text()') + str(" }")
+            date = ",\"date\":\"" + returnValueAsString(tree, '//*[@id="idmsChartDate"]/text()')
+
+            self.wfile.write((str(price) + str(date) + str(time)).encode('utf-8'))
 
         except:
           self.wfile.write(traceback.format_exc().encode('utf-8'))
