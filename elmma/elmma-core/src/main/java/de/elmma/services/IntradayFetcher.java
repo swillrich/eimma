@@ -1,4 +1,4 @@
-package de.elmma;
+package de.elmma.services;
 
 //@Service("historicalDateFetcher")
 //unused

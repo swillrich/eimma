@@ -1,4 +1,4 @@
-package de.elmma;
+package de.elmma.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +11,9 @@ import org.hibernate.Transaction;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.elmma.ElmmaHibernateConfiguration.HBM2DDL_AUTO;
+import de.elmma.controller.JSONURLReader;
+import de.elmma.dbio.ElmmaHibernateConfiguration;
+import de.elmma.dbio.ElmmaHibernateConfiguration.HBM2DDL_AUTO;
 import de.elmma.model.Price;
 
 //@Service("historicalDateFetcher")
