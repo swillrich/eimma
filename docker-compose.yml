@@ -3,7 +3,8 @@ services:
     db:
         image: mysql:latest
         volumes:
-            - .\mysql:/var/lib/mysql
+            - ./mysql:/var/lib/mysql
+            - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
         environment:
             MYSQL_ROOT_PASSWORD: 123456
             MYSQL_DATABASE: elmma
@@ -42,6 +43,5 @@ services:
         networks:
             - elmma-nw     
         
-
 networks:
     elmma-nw:
