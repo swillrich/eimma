@@ -1,5 +1,6 @@
 package de.elmma.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,7 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +37,15 @@ public class Price {
 	@NonNull
 	@Column(name = "datetime", nullable = false, columnDefinition = "DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date date;
+	private Date datetime;
 	@NonNull
 	@Column(name = "price")
 	private double price;
+
+	@Getter(AccessLevel.NONE)
+	private String readableDateTime;
+
+	public String getReadableDateTime() {
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(getDatetime());
+	}
 }

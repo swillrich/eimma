@@ -14,7 +14,7 @@ public class SessionProvider {
 		return (T) new HibernateSessionProvider() {
 
 			@Override
-			Object work(Session session) {
+			public Object work(Session session) {
 				Query query = session.createQuery(sql);
 				return qe.work(query);
 			}
@@ -25,7 +25,7 @@ public class SessionProvider {
 		return new HibernateSessionProvider() {
 
 			@Override
-			Object work(Session session) {
+			public Object work(Session session) {
 				Transaction transaction = session.beginTransaction();
 				Object o = onSave.work(session);
 				transaction.commit();
@@ -43,10 +43,10 @@ public class SessionProvider {
 	}
 
 	@Data
-	private static abstract class HibernateSessionProvider {
+	public static abstract class HibernateSessionProvider {
 		private Object result;
 
-		abstract Object work(Session session);
+		public abstract Object work(Session session);
 
 		public HibernateSessionProvider() {
 			SessionFactory factory = new ElmmaHibernateConfiguration(HBM2DDL_AUTO.UPDATE).buildSessionFactory();
