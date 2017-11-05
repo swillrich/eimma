@@ -20,9 +20,27 @@ import de.elmma.model.Price;
 @RestController
 @RequestMapping("/prices")
 public class PriceController {
+	@RequestMapping(value = "/csv", method = RequestMethod.GET, produces = { "text/plain" })
+	public String csvPrices(@RequestParam(value = "from", required = false) String from,
+			@RequestParam(value = "to", required = false) String to) throws ParseException {
+		List<Price> prices = getPrices(from, to);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		StringBuilder b = new StringBuilder();
+		b.append("Datetime,Price\n");
+		for (int i = 0; i < prices.size(); i++) {
+			Price price = prices.get(i);
+			b.append(format.format(prices.get(i).getDatetime()) + "," + price.getPrice() + "\n");
+		}
+		return b.toString();
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public List<Price> prices(@RequestParam(value = "from", required = false) String from,
 			@RequestParam(value = "to", required = false) String to) throws ParseException {
+		return getPrices(from, to);
+	}
+
+	private List<Price> getPrices(String from, String to) {
 		return (List<Price>) new HibernateSessionProvider() {
 
 			@Override

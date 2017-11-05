@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/dist/dygraph.css" />
+<title>Stock chart</title>
+<script type="text/javascript" src="/dist/dygraph.js"></script>
+
+</head>
+<body>
+	<h2>Elmma Line Diagram</h2>
+	<div id="stock_div" style="width: 90%; height: 500px;"></div>
+
+	<script type="text/javascript">
+		function renderDiagram(from, to) {
+			console.log("fetch from: /prices/csv?from=" + from + "&amp;to="
+					+ to);
+			g = new Dygraph(document.getElementById("stock_div"),
+					"/prices/csv?from=" + from + "&to=" + to);
+		}
+
+		function handleUpdate() {
+			var from = document.getElementById("param_from").value;
+			var to = document.getElementById("param_to").value;
+			renderDiagram(from, to);
+		}
+	</script>
+
+	FROM
+	<input type="text" id="param_from" size="20" /> TO
+	<input type="text" id="param_to" size="20" />
+	<input type="submit" value="Submit" onClick="handleUpdate()" />
+	<script type="text/javascript">
+		var from = "2011-05-02";
+		var to = "2011-05-04";
+
+		renderDiagram(from, to);
+
+		document.getElementById("param_from").value = from;
+		document.getElementById("param_to").value = to;
+	</script>
+</body>
+</html>
