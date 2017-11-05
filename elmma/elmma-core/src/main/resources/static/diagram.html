@@ -11,32 +11,29 @@
 	<div id="stock_div" style="width: 90%; height: 500px;"></div>
 
 	<script type="text/javascript">
-		function renderDiagram(from, to) {
+		function renderDiagram(url) {
 			console.log("fetch from: /prices/csv?from=" + from + "&amp;to="
 					+ to);
-			g = new Dygraph(document.getElementById("stock_div"),
-					"/prices/csv?from=" + from + "&to=" + to);
+			g = new Dygraph(document.getElementById("stock_div"), url);
 		}
 
 		function handleUpdate() {
-			var from = document.getElementById("param_from").value;
-			var to = document.getElementById("param_to").value;
-			renderDiagram(from, to);
+			var url = document.getElementById("param_url").value;
+			renderDiagram(url);
 		}
 	</script>
 
-	FROM
-	<input type="text" id="param_from" size="20" /> TO
-	<input type="text" id="param_to" size="20" />
-	<input type="submit" value="Submit" onClick="handleUpdate()" />
+	URL
+	<input type="text" id="param_url" size="100" size="20" />
+	<input type="submit" value="Update" onClick="handleUpdate()" />
 	<script type="text/javascript">
 		var from = "2011-05-02";
 		var to = "2011-05-04";
+		var url = "/prices/csv?from=" + from + "&to=" + to;
 
-		renderDiagram(from, to);
+		renderDiagram(url);
 
-		document.getElementById("param_from").value = from;
-		document.getElementById("param_to").value = to;
+		document.getElementById("param_url").value = url;
 	</script>
 </body>
 </html>

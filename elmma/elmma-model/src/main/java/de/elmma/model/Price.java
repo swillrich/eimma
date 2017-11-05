@@ -1,5 +1,6 @@
 package de.elmma.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,13 +9,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
-import lombok.AccessLevel;
+import org.hibernate.CallbackException;
+import org.hibernate.Session;
+import org.hibernate.classic.Lifecycle;
+
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -26,26 +32,55 @@ import lombok.ToString;
 @Table(name = "T_PRICE")
 @RequiredArgsConstructor
 @NoArgsConstructor
-public class Price {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Price implements Lifecycle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int id;
+	int id;
 	@NonNull
 	@Column(name = "underlying", nullable = false)
-	private String underlying;
+	String underlying;
 	@NonNull
 	@Column(name = "datetime", nullable = false, columnDefinition = "DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date datetime;
+	Date datetime;
 	@NonNull
 	@Column(name = "price")
-	private double price;
+	double price;
 
-	@Getter(AccessLevel.NONE)
-	private String readableDateTime;
+	@Transient
+	double priceChange;
+	@Transient
+	double priceChangeRatio;
+	@Transient
+	String readableDateTime;
 
-	public String getReadableDateTime() {
-		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(getDatetime());
+	public void consumePrevious(Price p) {
+		this.priceChange = this.getPrice() - p.getPrice();
+		this.priceChangeRatio = this.priceChange / p.getPrice();
+	}
+
+	@Override
+	public boolean onDelete(Session arg0) throws CallbackException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onLoad(Session arg0, Serializable arg1) {
+		this.readableDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(getDatetime());
+	}
+
+	@Override
+	public boolean onSave(Session arg0) throws CallbackException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onUpdate(Session arg0) throws CallbackException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
