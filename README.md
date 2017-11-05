@@ -2,7 +2,7 @@
 
 ## Run all services
 
-To run all services the docker-compose.yml file consists of, type `docker-compose up -d` (-d means running in daemon mode). To run with a prior build of all docker images, type: `docker-compose up -d --build` (recommended!).
+To run all services the docker-compose.yml file consists of, type `docker-compose up -d` (-d means running in daemon mode). To run with a prior build of all docker images, type: `docker-compose up -d --build` (recommended when running initially or after some time elapsed!).
 
 Services:
 
