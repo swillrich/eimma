@@ -1,38 +1,51 @@
 package de.elmma.services;
 
-//@Service("historicalDateFetcher")
-//unused
+import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+
+import de.elmma.controller.JSONURLReader;
+import de.elmma.dbio.SessionProvider;
+import de.elmma.model.Price;
+
+@Service("CurrentPriceFetcher")
 public class IntradayFetcher {
+
+	SimpleDateFormat format = new SimpleDateFormat("dd. MMM yyyy HH:mm");
+
 	public IntradayFetcher() {
-//		while (true) {
-//
-//			JSONObject json = JSONURLReader.readJsonFromUrl("http://elmma-exchange-api:8080/snapshot");
-//			JSONObject price = json.getJSONObject("price");
-//			JSONObject date = json.getJSONObject("date");
-//			JSONObject time = json.getJSONObject("time");
-//
-//			List<Price> prices = new ArrayList<Price>();
-//
-//			for (int i = 0; dates.has(String.valueOf(i)); i++) {
-//				String id = String.valueOf(i);
-//				String date = (String) dates.get(id);
-//				double open = (double) opens.get(id);
-//
-//				String[] ds = date.split("-");
-//
-//				Price price = new Price(underlying,
-//						new Date(Integer.valueOf(ds[0]), Integer.valueOf(ds[1]), Integer.valueOf(ds[2])), open);
-//				prices.add(price);
-//			}
-//
-//			ElmmaHibernateConfiguration configuration = new ElmmaHibernateConfiguration(HBM2DDL_AUTO.UPDATE);
-//			SessionFactory factory = configuration.buildSessionFactory();
-//			Session session = factory.openSession();
-//			Transaction transaction = session.beginTransaction();
-//			prices.forEach(p -> session.save(p));
-//			transaction.commit();
-//			session.close();
-//			System.out.println("finished");
-//		}
+		Price lastPrice = SessionProvider.take("FROM Price p ORDER BY p.datetime DESC", q -> {
+			q.setMaxResults(1);
+			return q.uniqueResult();
+		});
+		System.out.println("####### take the last price: " + lastPrice);
+		while (true) {
+			try {
+				Price price = fetchCurrentPrice();
+				if (price.getDatetime().getTime() > lastPrice.getDatetime().getTime()) {
+					SessionProvider.save(session -> session.save(price));
+					lastPrice = price;
+					System.out.println("####### saved new price: " + lastPrice);
+				}
+				Thread.sleep(1000);
+			} catch (ParseException | InterruptedException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private Price fetchCurrentPrice() throws IOException, ParseException {
+		JSONObject json = JSONURLReader.readJsonFromUrl("http://elmma-exchange-api:8080/snapshot");
+		NumberFormat nrformat = NumberFormat.getNumberInstance(Locale.GERMANY);
+		double price = nrformat.parse(json.getString("price")).doubleValue();
+		String dateAsString = json.getString("date") + " " + json.getString("time");
+		Date date = format.parse(dateAsString);
+		return new Price("DAX", date, price);
 	}
 }
