@@ -2,12 +2,11 @@
 
 ## Run all services
 
-To run all services the docker-compose.yml file consists of, type `docker-compose up -d` (-d means running in daemon mode)
+To run all services the docker-compose.yml file consists of, type `docker-compose up -d` (-d means running in daemon mode). To run with a prior build of all docker images, type: `docker-compose up -d --build` (recommended!).
 
-## Serve the Exchange Api
+Services:
 
-To build the docker exchange-api image, `docker build -t elmma-exchange-api -f elmma/exchange-api/Dockerfile .`
-
-To run the image, type `docker run -it --rm --name exchange-api -d -v {$PWD}/exchange-api:/usr/src/app -p 8080:8080 elmma-exchange-api`
-
-Exchange Api is accessible by http://localhost:8080, to display the historical DAX data for the duration of 2016-01-01 to 2017-01-01, call http://localhost:8080/?ticker=^GDAXI&from=2016-01-01&to=2017-01-01
+1. Dax snapshot http://localhost:8080/snapshot
+2. All DAX prices between the given range as JSON: http://localhost:3000/prices?from=2011-05-02&to=2011-05-02
+3. All DAX prices between the given range as CSV: http://localhost:3000/prices/csv?from=2011-05-02&to=2011-05-02 (for dygraph visualization purposes needed)
+4. Show behavior of a KnockOut option tracking the DAX alongside a given period: http://localhost:3000/ko?from=2011-05-02&to=2011-05-02 ([...]:3000/ko/csv?[...] also available for CSV provision)
