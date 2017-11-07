@@ -8,35 +8,46 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.json.JSONObject;
-import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import de.elmma.controller.JSONURLReader;
 import de.elmma.dbio.SessionProvider;
 import de.elmma.model.Price;
 
-@Service("CurrentPriceFetcher")
+//@Component
 public class IntradayFetcher {
+
+	private static final Logger log = LoggerFactory.getLogger(IntradayFetcher.class);
 
 	SimpleDateFormat format = new SimpleDateFormat("dd. MMM yyyy HH:mm");
 
+	Price lastPrice = null;
+
 	public IntradayFetcher() {
-		Price lastPrice = SessionProvider.take("FROM Price p ORDER BY p.datetime DESC", q -> {
+		lastPrice = SessionProvider.take("FROM Price p ORDER BY p.datetime DESC", q -> {
 			q.setMaxResults(1);
 			return q.uniqueResult();
 		});
+		log.info("####### take the last price: " + lastPrice);
 		System.out.println("####### take the last price: " + lastPrice);
-		while (true) {
-			try {
-				Price price = fetchCurrentPrice();
-				if (price.getDatetime().getTime() > lastPrice.getDatetime().getTime()) {
-					SessionProvider.save(session -> session.save(price));
-					lastPrice = price;
-					System.out.println("####### saved new price: " + lastPrice);
-				}
-				Thread.sleep(1000);
-			} catch (ParseException | InterruptedException | IOException e) {
-				e.printStackTrace();
+	}
+
+	@Scheduled(fixedRate = 1000)
+	private void requestNewPrice() {
+		try {
+			Price price = fetchCurrentPrice();
+			if (price.getDatetime().getTime() > lastPrice.getDatetime().getTime()) {
+				SessionProvider.save(session -> session.save(price));
+				lastPrice = price;
+				log.info("####### saved new price: " + lastPrice);
+				System.out.println("####### saved new price: " + lastPrice);
 			}
+			Thread.sleep(1000);
+		} catch (ParseException | InterruptedException | IOException e) {
+			e.printStackTrace();
 		}
 	}
 

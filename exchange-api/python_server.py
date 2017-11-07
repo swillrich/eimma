@@ -8,6 +8,8 @@ from yahoo_finance import Share
 import traceback
 from lxml import html
 import requests
+import time
+
 
 def extract_var(var, query):
   return str(query[var]).replace('[','').replace(']','').replace('\'','')
@@ -63,10 +65,16 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
             page = requests.get('http://www.xetra.com/xetra-de/')
             tree = html.fromstring(page.content)
             price = "{ \"price\":\"" + returnValueAsString(tree, '//*[@id="idmsChartLast"]/text()')
-            time = ",\"time\":\"" + returnValueAsString(tree, '//*[@id="idmsChartTime"]/text()') + str(" }")
-            date = ",\"date\":\"" + returnValueAsString(tree, '//*[@id="idmsChartDate"]/text()')
+            timeS = ",\"time\":\"" + returnValueAsString(tree, '//*[@id="idmsChartTime"]/text()') + str(" }")
+            dateS = ",\"date\":\"" + returnValueAsString(tree, '//*[@id="idmsChartDate"]/text()')
+            
+            #page = requests.get('http://www.ariva.de/db_dax_indikation-index/kurs')
+            #tree = html.fromstring(page.content)
+            #price = "{ \"price\":\"" + returnValueAsString(tree, '//*[@id="pageQuotes"]/div[2]/div[1]/table/tbody/tr[2]/td[2]/span/text()')
+            #timeS = ",\"time\":\"" + returnValueAsString(tree, '//*[@id="pageQuotes"]/div[2]/div[1]/table/tbody/tr[2]/td[10]/span/text()') + str(" }")
+            #dateS = time.strftime("%Y-%m-%d")
 
-            self.wfile.write((str(price) + str(date) + str(time)).encode('utf-8'))
+            self.wfile.write((str(price) + str(dateS) + str(timeS)).encode('utf-8'))
 
         except:
           self.wfile.write(traceback.format_exc().encode('utf-8'))

@@ -15,7 +15,7 @@ import de.elmma.model.Price;
 
 public class PriceDAO {
 	public static List<Price> getPrices(String from, String to) {
-		return (List<Price>) new HibernateSessionProvider() {
+		List<Price> prices = (List<Price>) new HibernateSessionProvider() {
 
 			@Override
 			public Object work(Session session) {
@@ -40,5 +40,10 @@ public class PriceDAO {
 				return format.parse(strDate);
 			}
 		}.getResult();
+
+		for (int i = 1; i < prices.size(); i++) {
+			prices.get(i).consumePrevious(prices.get(0));
+		}
+		return prices;
 	}
 }
