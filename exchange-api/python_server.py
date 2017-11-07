@@ -62,19 +62,11 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
             return
 
           if "snapshot" in self.path:
-            page = requests.get('http://www.xetra.com/xetra-de/')
+            page = requests.get('https://www.ig.com/uk/ig-indices/germany-30')
             tree = html.fromstring(page.content)
-            price = "{ \"price\":\"" + returnValueAsString(tree, '//*[@id="idmsChartLast"]/text()')
-            timeS = ",\"time\":\"" + returnValueAsString(tree, '//*[@id="idmsChartTime"]/text()') + str(" }")
-            dateS = ",\"date\":\"" + returnValueAsString(tree, '//*[@id="idmsChartDate"]/text()')
-            
-            #page = requests.get('http://www.ariva.de/db_dax_indikation-index/kurs')
-            #tree = html.fromstring(page.content)
-            #price = "{ \"price\":\"" + returnValueAsString(tree, '//*[@id="pageQuotes"]/div[2]/div[1]/table/tbody/tr[2]/td[2]/span/text()')
-            #timeS = ",\"time\":\"" + returnValueAsString(tree, '//*[@id="pageQuotes"]/div[2]/div[1]/table/tbody/tr[2]/td[10]/span/text()') + str(" }")
-            #dateS = time.strftime("%Y-%m-%d")
+            price = "{ \"price\":\"" + returnValueAsString(tree, '//*[@id="ofr"]/text()') + "}"
 
-            self.wfile.write((str(price) + str(dateS) + str(timeS)).encode('utf-8'))
+            self.wfile.write(price.encode('utf-8'))
 
         except:
           self.wfile.write(traceback.format_exc().encode('utf-8'))

@@ -17,7 +17,7 @@ import de.elmma.controller.JSONURLReader;
 import de.elmma.dbio.SessionProvider;
 import de.elmma.model.Price;
 
-//@Component
+@Component
 public class IntradayFetcher {
 
 	private static final Logger log = LoggerFactory.getLogger(IntradayFetcher.class);
@@ -39,7 +39,7 @@ public class IntradayFetcher {
 	private void requestNewPrice() {
 		try {
 			Price price = fetchCurrentPrice();
-			if (price.getDatetime().getTime() > lastPrice.getDatetime().getTime()) {
+			if (price.getPrice() != price.getPrice()) {
 				SessionProvider.save(session -> session.save(price));
 				lastPrice = price;
 				log.info("####### saved new price: " + lastPrice);
@@ -55,8 +55,6 @@ public class IntradayFetcher {
 		JSONObject json = JSONURLReader.readJsonFromUrl("http://elmma-exchange-api:8080/snapshot");
 		NumberFormat nrformat = NumberFormat.getNumberInstance(Locale.GERMANY);
 		double price = nrformat.parse(json.getString("price")).doubleValue();
-		String dateAsString = json.getString("date") + " " + json.getString("time");
-		Date date = format.parse(dateAsString);
-		return new Price("DAX", date, price);
+		return new Price("DAX", new Date(), price);
 	}
 }
