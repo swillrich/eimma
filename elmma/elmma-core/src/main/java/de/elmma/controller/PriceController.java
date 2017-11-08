@@ -12,9 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.elmma.model.Price;
 
+/**
+ * Endpunkt zum Auslesen von Kurswerten
+ * @author Danilo.Schmidt
+ *
+ */
 @RestController
 @RequestMapping("/prices")
 public class PriceController {
+	/**
+	 * Auslesen als csv-Format (Datum von bis)
+	 * @param from
+	 * @param to
+	 * @return
+	 * @throws ParseException
+	 */
 	@RequestMapping(value = "/csv", method = RequestMethod.GET, produces = { "text/plain" })
 	public String csvPrices(@RequestParam(value = "from", required = false) String from,
 			@RequestParam(value = "to", required = false) String to) throws ParseException {
@@ -27,6 +39,13 @@ public class PriceController {
 		return b.toString();
 	}
 
+	/**
+	 * Auslesen als JSON-Objekt (Datum von bis)
+	 * @param from
+	 * @param to
+	 * @return
+	 * @throws ParseException
+	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public List<Price> prices(@RequestParam(value = "from", required = false) String from,
 			@RequestParam(value = "to", required = false) String to) throws ParseException {

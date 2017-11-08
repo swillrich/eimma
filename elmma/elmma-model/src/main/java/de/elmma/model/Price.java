@@ -26,6 +26,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+/**
+ * ein Kurswert-Datensazt Objekt
+ * @author Danilo.Schmidt
+ *
+ */
 @ToString
 @Data
 @Entity

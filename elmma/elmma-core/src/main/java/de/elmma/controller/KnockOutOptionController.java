@@ -14,19 +14,20 @@ import org.springframework.web.bind.annotation.RestController;
 import de.elmma.model.KnockOutOption;
 import de.elmma.model.Price;
 
+/**
+ * Generiert aus einem gegebenne Basiswert (bspw. DAX) den Kursverlauf eines Knockouts.* 
+ *
+ */
 @RestController
 @RequestMapping("/ko")
-public class KockOutOptionController {
-	@RequestMapping(method = RequestMethod.GET)
-	public List<KnockOutOption> ko(@RequestParam(value = "from", required = false) String from,
-			@RequestParam(value = "to", required = false) String to) throws ParseException {
-		double initialPrice = 2;
-		String name = "WKN123456";
-		double multiplier = 1d / 100;
-		List<KnockOutOption> kos = generateKOsTimeSeries(from, to, initialPrice, name, multiplier);
-		return kos;
-	}
-
+public class KnockOutOptionController {
+	/**
+	 * Auslesen als csv-Format (Datum von bis)
+	 * @param from
+	 * @param to
+	 * @return
+	 * @throws ParseException
+	 */
 	@RequestMapping(value = "/csv", method = RequestMethod.GET, produces = { "text/plain" })
 	public String csvPrices(@RequestParam(value = "from", required = false) String from,
 			@RequestParam(value = "to", required = false) String to) throws ParseException {
@@ -43,7 +44,33 @@ public class KockOutOptionController {
 		b.append(csvContent);
 		return b.toString();
 	}
-
+	
+	/**
+	 * Auslesen als JSON-Objekt (Datum von bis)
+	 * @param from
+	 * @param to
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping(method = RequestMethod.GET)
+	public List<KnockOutOption> ko(@RequestParam(value = "from", required = false) String from,
+			@RequestParam(value = "to", required = false) String to) throws ParseException {
+		double initialPrice = 2;
+		String name = "WKN123456";
+		double multiplier = 1d / 100;
+		List<KnockOutOption> kos = generateKOsTimeSeries(from, to, initialPrice, name, multiplier);
+		return kos;
+	}
+	
+	/**
+	 * Helper method für die Berechnung
+	 * @param from
+	 * @param to
+	 * @param initialPrice
+	 * @param name
+	 * @param multiplier
+	 * @return
+	 */
 	private List<KnockOutOption> generateKOsTimeSeries(String from, String to, double initialPrice, String name,
 			double multiplier) {
 		List<Price> prices = PriceDAO.getPrices(from, to);

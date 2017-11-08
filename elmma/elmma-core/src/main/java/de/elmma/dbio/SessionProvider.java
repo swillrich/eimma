@@ -8,8 +8,15 @@ import org.hibernate.Transaction;
 import de.elmma.dbio.ElmmaHibernateConfiguration.HBM2DDL_AUTO;
 import lombok.Data;
 
+/**
+ * Liefert eine vorkonfigurierte Hibernate-Session und vereinfacht das Reinschreiben/Rausschreiben in die DB.
+ *
+ */
 public class SessionProvider {
 
+	/**
+	 * Nimmt ein Hibernate-SQL und implementiere, was geschehen soll
+	 */
 	public static <T> T take(String sql, OnQuery<?> qe) {
 		return (T) new HibernateSessionProvider() {
 

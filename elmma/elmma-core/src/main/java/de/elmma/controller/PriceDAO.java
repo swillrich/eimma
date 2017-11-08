@@ -14,6 +14,12 @@ import de.elmma.dbio.SessionProvider.HibernateSessionProvider;
 import de.elmma.model.Price;
 
 public class PriceDAO {
+	/**
+	 * liefere alle Kurswerte von Datum zu Datum
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 	public static List<Price> getPrices(String from, String to) {
 		List<Price> prices = (List<Price>) new HibernateSessionProvider() {
 

@@ -18,35 +18,41 @@ import de.elmma.dbio.SessionProvider;
 import de.elmma.model.Price;
 
 @Component
+/**
+ * Dieser Service ist nur dafür da, um Daten aus elmma-exchange-api bei Kursänderung 
+ * in die Datenbank zu schreiben, weil wir diese Werte für spätere Analysezwecke widerverwenden wollen.
+ * 
+ * @author Danilo.Schmidt
+ *
+ */
 public class IntradayFetcher {
 
 	private static final Logger log = LoggerFactory.getLogger(IntradayFetcher.class);
 
 	SimpleDateFormat format = new SimpleDateFormat("dd. MMM yyyy HH:mm");
 
-	Price lastPrice = null;
+	Price currentPrice = null;
 
 	public IntradayFetcher() {
-		lastPrice = SessionProvider.take("FROM Price p ORDER BY p.datetime DESC", q -> {
+		currentPrice = SessionProvider.take("FROM Price p ORDER BY p.datetime DESC", q -> {
 			q.setMaxResults(1);
 			return q.uniqueResult();
 		});
-		log.info("####### take the last price: " + lastPrice);
-		System.out.println("####### take the last price: " + lastPrice);
+		log.info("####### take the last price: " + currentPrice);
+		System.out.println("####### take the last price: " + currentPrice);
 	}
 
 	@Scheduled(fixedRate = 1000)
 	private void requestNewPrice() {
 		try {
-			Price price = fetchCurrentPrice();
-			if (price.getPrice() != price.getPrice()) {
-				SessionProvider.save(session -> session.save(price));
-				lastPrice = price;
-				log.info("####### saved new price: " + lastPrice);
-				System.out.println("####### saved new price: " + lastPrice);
+			Price newPrice = fetchCurrentPrice();
+			if (newPrice.getPrice() != currentPrice.getPrice()) {
+				SessionProvider.save(session -> session.save(newPrice));
+				currentPrice = newPrice;
+				log.info("####### saved new price: " + currentPrice);
+				System.out.println("####### saved new price: " + currentPrice);
 			}
-			Thread.sleep(1000);
-		} catch (ParseException | InterruptedException | IOException e) {
+		} catch (ParseException | IOException e) {
 			e.printStackTrace();
 		}
 	}
