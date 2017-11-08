@@ -6,9 +6,13 @@ import lombok.Data;
 
 @Data
 public abstract class Strategy {
+	private double invest;
+
 	private Performance performance;
 
-	abstract double getInitialInvest();
+	public Strategy(double invest) {
+		this.invest = invest;
+	}
 
 	abstract void onUpdate(Price update);
 }
