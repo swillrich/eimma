@@ -11,6 +11,9 @@
 	<div id="stock_div" style="width: 90%; height: 500px;"></div>
 
 	<script type="text/javascript">
+	
+		var update_url = null;
+	
 		function renderDiagram(url) {
 			console.log("fetch from: /prices/csv?from=" + from + "&amp;to="
 					+ to);
@@ -20,7 +23,9 @@
 		function handleUpdate() {
 			var url = document.getElementById("param_url").value;
 			renderDiagram(url);
+			update_url = url;
 		}
+		
 	</script>
 
 	URL
@@ -34,6 +39,13 @@
 		renderDiagram(url);
 
 		document.getElementById("param_url").value = url;
-	</script>
+		update_url = url;
+		
+		window.intervalId = setInterval(function() {
+			g.updateOptions({
+				'file' : update_url
+			});
+		}, 2000);	
+		</script>
 </body>
 </html>

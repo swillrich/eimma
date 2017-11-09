@@ -52,7 +52,7 @@ public class IntradayFetcher {
 				log.info("####### saved new price: " + currentPrice);
 			}
 		} catch (ParseException | IOException e) {
-			e.printStackTrace();
+			log.error("parsing not successfull or server down", e);
 		}
 	}
 
@@ -61,9 +61,9 @@ public class IntradayFetcher {
 		NumberFormat nrformat = NumberFormat.getNumberInstance(Locale.GERMANY);
 		double price = nrformat.parse(json.getString("price")).doubleValue();
 
-		SimpleDateFormat format = new SimpleDateFormat("k:mma yyyy-MM-dd");
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = format.parse(json.getString("time").replace("GMT+1", "") + formatDate.format(new Date()));
+		Date date = format.parse(json.getString("time") + " " + formatDate.format(new Date()));
 
 		return new Price("DAX", date, price);
 	}

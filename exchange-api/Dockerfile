@@ -15,5 +15,6 @@ RUN pip install git+https://github.com/jsonpickle/jsonpickle.git
 RUN pip install lxml
 RUN pip install requests
 RUN pip install bs4
+RUN pip install selenium
 
 CMD python python_server.py

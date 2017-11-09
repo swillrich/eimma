@@ -11,12 +11,26 @@ import requests
 import time
 from bs4 import BeautifulSoup
 import urllib.request
-
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 tickerFile = open("ticker.txt")
 tickerList = tickerFile.read()
 tickerArr = tickerList.split("\n")
 BASE_URL = "https://www.google.com/finance?q=NASDAQ%3A"
+
+while True:
+    try:
+        driver = webdriver.Remote("http://headless:4444/wd/hub", DesiredCapabilities.CHROME)
+        driver.get("http://www.finanzen.net/index/DAX-Realtime")
+        break;
+    except:
+        print("server http://headless:4444/wd/hub yet down")
+
+def getRealTimePrices():
+    pkt = driver.find_elements_by_css_selector('span.push-data')[12].text
+    time = driver.find_elements_by_css_selector('span.push-data')[13].text
+    return '{"price" : "'+pkt+'","time" : "'+time+'"}' 
 
 def get_stock_price():
     """
@@ -45,6 +59,8 @@ def get_stock_price():
         #    print ticker, ": $", stock_price, "Price Fluctuation: $", price_fluctuation.text.strip()
         return '{"price" : "'+stock_price+'","time" : "'+timeChange+'"}'
         
+
+        
 def extract_var(var, query):
   return str(query[var]).replace('[','').replace(']','').replace('\'','')
 
@@ -70,7 +86,7 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         
         try:
-            self.wfile.write(get_stock_price().encode('utf-8'))
+            self.wfile.write(getRealTimePrices().encode('utf-8'))
 
         except:
           self.wfile.write(traceback.format_exc().encode('utf-8'))
