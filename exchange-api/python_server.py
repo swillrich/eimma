@@ -9,8 +9,42 @@ import traceback
 from lxml import html
 import requests
 import time
+from bs4 import BeautifulSoup
+import urllib.request
 
 
+tickerFile = open("ticker.txt")
+tickerList = tickerFile.read()
+tickerArr = tickerList.split("\n")
+BASE_URL = "https://www.google.com/finance?q=NASDAQ%3A"
+
+def get_stock_price():
+    """
+    Scrapes google finance and the ticket symbol
+    page and returns stock price for each symbol
+    """
+    for ticker in tickerArr:
+        url = "https://finance.google.com/finance?q=INDEXDB:DAX"
+        if ticker != "DAX":
+            url = BASE_URL + ticker
+        
+        with urllib.request.urlopen(url) as url:
+            htmltext = url.read()
+
+        soup = BeautifulSoup(htmltext, 'html.parser')
+        
+        market_data = soup.find('span', attrs={'class' : 'pr'})
+        price_fluctuation = soup.find('span', attrs={'class' : 'chg'})
+        stock_price = market_data.text.strip()
+        
+        time_market_data = soup.find('span', attrs={'id' : 'ref_14199910_ltt'})
+        timeChange = time_market_data.text.strip()
+        #if price_fluctuation is None:
+        #    print ticker, ": $", stock_price
+        #else:
+        #    print ticker, ": $", stock_price, "Price Fluctuation: $", price_fluctuation.text.strip()
+        return '{"price" : "'+stock_price+'","time" : "'+timeChange+'"}'
+        
 def extract_var(var, query):
   return str(query[var]).replace('[','').replace(']','').replace('\'','')
 
@@ -36,37 +70,7 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         
         try:
-          query = parse_qs(urlparse(self.path).query)
-        
-          if "favicon.ico" in self.path:
-            self.wfile.write("no variables given".encode('utf-8'))
-            return
-    
-          if "history" in self.path:        
-            #https://github.com/lukaszbanasiak/yahoo-finance
-            ticker = extract_var("ticker", query)
-            f = extract_date("from", query)
-            to = extract_date("to", query)
-            # Send message back to client
-            #data = Fetcher('^GDAXI', [2016,1,1], [2017,1,1])
-            print("ticker is: " + ticker)
-            print("from: " + repr(f))
-            print("to: " + repr(to))
-            data = Fetcher(ticker, f, to)
-            d = data.getHistorical()
-            d.to_json('/usr/src/data_fetched.csv')
-            f = open('/usr/src/data_fetched.csv', 'r')
-            # Write content as utf-8 data
-            self.wfile.write(f.read().encode('utf-8'))
-            f.close()
-            return
-
-          if "snapshot" in self.path:
-            page = requests.get('https://www.ig.com/uk/ig-indices/germany-30')
-            tree = html.fromstring(page.content)
-            price = "{ \"price\":\"" + returnValueAsString(tree, '//*[@id="ofr"]/text()') + "}"
-
-            self.wfile.write(price.encode('utf-8'))
+            self.wfile.write(get_stock_price().encode('utf-8'))
 
         except:
           self.wfile.write(traceback.format_exc().encode('utf-8'))
