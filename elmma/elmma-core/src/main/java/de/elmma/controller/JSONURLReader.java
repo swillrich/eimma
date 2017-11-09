@@ -12,8 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Hilfsklasse zum JSON lesen
- *
+ * Service helper class rading the JSON input of a given URL and returns a JSON
+ * object.
  */
 public class JSONURLReader {
 

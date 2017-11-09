@@ -19,8 +19,9 @@ import de.elmma.model.Price;
 
 @Component
 /**
- * Dieser Service ist nur dafür da, um Daten aus elmma-exchange-api bei Kursänderung 
- * in die Datenbank zu schreiben, weil wir diese Werte für spätere Analysezwecke widerverwenden wollen.
+ * Dieser Service ist nur dafür da, um Daten aus elmma-exchange-api bei
+ * Kursänderung in die Datenbank zu schreiben, weil wir diese Werte für spätere
+ * Analysezwecke widerverwenden wollen.
  * 
  * @author Danilo.Schmidt
  *
@@ -43,7 +44,6 @@ public class IntradayFetcher {
 			return q.uniqueResult();
 		});
 		log.info("####### take the last price: " + currentPrice);
-		System.out.println("####### take the last price: " + currentPrice);
 	}
 
 	/**
@@ -54,15 +54,14 @@ public class IntradayFetcher {
 	@Scheduled(fixedRate = 1000)
 	private void requestNewPrice() {
 		try {
-			Price newPrice = fetchCurrentPrice();
-			if (newPrice.getPrice() != currentPrice.getPrice()) {
-				SessionProvider.save(session -> session.save(newPrice));
-				currentPrice = newPrice;
+			Price price = fetchCurrentPrice();
+			if (price.getPrice() != currentPrice.getPrice()) {
+				SessionProvider.save(session -> session.save(price));
+				currentPrice = price;
 				log.info("####### saved new price: " + currentPrice);
-				System.out.println("####### saved new price: " + currentPrice);
 			}
 		} catch (ParseException | IOException e) {
-			e.printStackTrace();
+			log.error("parsing not successfull or server down", e);
 		}
 	}
 
@@ -73,9 +72,14 @@ public class IntradayFetcher {
 	 * @throws ParseException
 	 */
 	private Price fetchCurrentPrice() throws IOException, ParseException {
-		JSONObject json = JSONURLReader.readJsonFromUrl("http://elmma-exchange-api:8080/snapshot");
+		JSONObject json = JSONURLReader.readJsonFromUrl("http://elmma-exchange-api:8080");
 		NumberFormat nrformat = NumberFormat.getNumberInstance(Locale.GERMANY);
 		double price = nrformat.parse(json.getString("price")).doubleValue();
-		return new Price("DAX", new Date(), price);
+
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
+		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = format.parse(json.getString("time") + " " + formatDate.format(new Date()));
+
+		return new Price("DAX", date, price);
 	}
 }
