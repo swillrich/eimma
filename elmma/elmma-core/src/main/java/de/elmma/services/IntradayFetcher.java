@@ -33,6 +33,10 @@ public class IntradayFetcher {
 
 	Price currentPrice = null;
 
+	
+	/**
+	 * hole zu Beginn den letzten Wert als aktuellen Wert aus der DB
+	 */
 	public IntradayFetcher() {
 		currentPrice = SessionProvider.take("FROM Price p ORDER BY p.datetime DESC", q -> {
 			q.setMaxResults(1);
@@ -42,6 +46,11 @@ public class IntradayFetcher {
 		System.out.println("####### take the last price: " + currentPrice);
 	}
 
+	/**
+	 * hole jede Sekunde (Heartbeat) den "angeblich" neuen Kurs vom fetcher und füge den Kurswert (aber 
+	 * nur bei Veränderung) in die Datenbank hinzu (erster Ansatz: wir errechnen später wie lang sich ein 
+	 * Kurs nict verändert hat, aber speichern nicht jede Sekunde den gleichen Wer ab, um die DB voll zu müllen?!) 
+	 */
 	@Scheduled(fixedRate = 1000)
 	private void requestNewPrice() {
 		try {
@@ -57,6 +66,12 @@ public class IntradayFetcher {
 		}
 	}
 
+	/**
+	 * Hilfsfunktion, welche den aktuellen Kurswert im heartbeat von der exchange api abholt
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	private Price fetchCurrentPrice() throws IOException, ParseException {
 		JSONObject json = JSONURLReader.readJsonFromUrl("http://elmma-exchange-api:8080/snapshot");
 		NumberFormat nrformat = NumberFormat.getNumberInstance(Locale.GERMANY);
