@@ -42,14 +42,19 @@ services:
         container_name: elmma
         networks:
             - elmma-nw
-
-    headless:
-        image: selenium/standalone-chrome
+            
+    dispatcher:
+        build: 
+            context: dispatcher
+            dockerfile: Dockerfile
+        image: dispatcher
+        volumes:
+            - ./dispatcher:/usr/src/app
         ports:
-            - "4444:4444"
-        container_name: headless
+            - "4242:4242"
+        container_name: dispatcher
         networks:
-            - elmma-nw
+            - elmma-nw     
         
 networks:
     elmma-nw:

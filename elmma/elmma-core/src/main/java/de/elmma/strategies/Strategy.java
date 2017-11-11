@@ -5,14 +5,10 @@ import de.elmma.model.Price;
 import lombok.Data;
 
 @Data
-public abstract class Strategy {
+public abstract class Strategy{
 	private double invest;
 
-	private Performance performance;
-
-	public Strategy(double invest) {
-		this.invest = invest;
-	}
+	private Performance performance = new Performance();
 
 	abstract void onUpdate(Price update);
 }
