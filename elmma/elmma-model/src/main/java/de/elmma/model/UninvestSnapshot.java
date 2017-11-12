@@ -5,10 +5,10 @@ import lombok.Data;
 @Data
 public class UninvestSnapshot extends Snapshot {
 
-	Price price;
+	Price observes;
 
 	public UninvestSnapshot(Price price, double value) {
-		this.price = price;
+		this.observes = price;
 		this.value = value;
 	}
 }

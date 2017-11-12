@@ -51,7 +51,7 @@ services:
         volumes:
             - /usr/src/app
         ports:
-            - "8081:8081"
+            - "8082:8081"
         container_name: dispatcher
         networks:
             - elmma-nw     

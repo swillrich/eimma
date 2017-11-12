@@ -38,7 +38,7 @@ public class TSS extends Strategy {
 
 	private Snapshot proceed(Price update) {
 		InvestSnapshot latestSnapshot = (InvestSnapshot) getPerformance().getLatest();
-		KnockOutOption latestOption = (KnockOutOption) latestSnapshot.getPrice();
+		KnockOutOption latestOption = (KnockOutOption) latestSnapshot.getInvestedIn();
 		KnockOutOption newOptionInstance = ElmmaModelFactory.nextKnockOutOption(latestOption, update);
 		Snapshot newSnapshot = ElmmaModelFactory.newInvestSnapshot(newOptionInstance, latestSnapshot.getCount());
 		return newSnapshot;

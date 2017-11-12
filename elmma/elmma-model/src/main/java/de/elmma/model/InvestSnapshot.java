@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class InvestSnapshot extends Snapshot {
 
-	Price price;
+	Price investedIn;
 	double count;
 
 	public InvestSnapshot(Price price, double count) {
-		this.price = price;
+		this.investedIn = price;
 		this.count = count;
 		if (price != null) {
 			this.value = price.getPrice() * count;
