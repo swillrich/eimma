@@ -23,7 +23,7 @@ import de.elmma.model.Price;
  * Kursänderung in die Datenbank zu schreiben, weil wir diese Werte für spätere
  * Analysezwecke widerverwenden wollen.
  * 
- * @author Danilo.Schmidt
+ * @author Erfinderdeck
  *
  */
 public class IntradayFetcher {
