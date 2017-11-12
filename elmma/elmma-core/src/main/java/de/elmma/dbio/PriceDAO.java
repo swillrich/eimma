@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -16,6 +17,7 @@ import de.elmma.model.Price;
 public class PriceDAO {
 	/**
 	 * liefere alle Kurswerte von Datum zu Datum
+	 * 
 	 * @param from
 	 * @param to
 	 * @return
@@ -47,9 +49,8 @@ public class PriceDAO {
 			}
 		}.getResult();
 
-		for (int i = 1; i < prices.size(); i++) {
-			prices.get(i).consumePrevious(prices.get(0));
-		}
+		IntStream.range(1, prices.size()).forEach(i -> prices.get(i).setPrevious(prices.get(i - 1)));
+
 		return prices;
 	}
 }

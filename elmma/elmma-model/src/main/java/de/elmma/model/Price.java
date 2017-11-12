@@ -20,6 +20,7 @@ import org.hibernate.CallbackException;
 import org.hibernate.Session;
 import org.hibernate.classic.Lifecycle;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -60,10 +61,10 @@ public class Price implements Lifecycle {
 	double priceChangeRatio;
 	@Transient
 	String readableDateTime;
-
-	public void consumePrevious(Price p) {
-		this.priceChange = this.getPrice() - p.getPrice();
-		this.priceChangeRatio = this.priceChange / p.getPrice();
+	
+	public void setPrevious(Price previous) {
+		this.priceChange = this.price - previous.getPrice();
+		this.priceChangeRatio = this.priceChange / this.price;
 	}
 
 	@Override
@@ -74,6 +75,10 @@ public class Price implements Lifecycle {
 
 	@Override
 	public void onLoad(Session arg0, Serializable arg1) {
+		initialize();
+	}
+
+	public void initialize() {
 		this.readableDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(getDatetime());
 	}
 
