@@ -1,6 +1,7 @@
 package de.elmma.strategies;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.elmma.model.ElmmaModelFactory;
 import de.elmma.model.Performance;
@@ -15,6 +16,11 @@ import lombok.Getter;
  */
 @Data
 public abstract class Strategy {
+
+	interface StrategyConfiguration {
+		String configure();
+	}
+
 	/**
 	 * Anfangsinvesat
 	 */
@@ -33,6 +39,13 @@ public abstract class Strategy {
 	 * @return
 	 */
 	abstract Snapshot onUpdate(Price update);
+
+	public abstract List<StrategyConfiguration> getConfigurations();
+
+	public void reset() {
+		getPriceHistory().clear();
+		getPerformance().clear();
+	}
 
 	public double getInvest() {
 		return performance.isEmpty() ? invest : performance.getLatest().getValue();
