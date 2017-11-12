@@ -3,16 +3,16 @@ package de.elmma.model;
 import lombok.Data;
 
 @Data
-public class InvestSnapshot {
+public class InvestSnapshot extends Snapshot {
 
 	Price price;
-	double value;
 	double count;
-	double changeRatio;
 
 	public InvestSnapshot(Price price, double count) {
 		this.price = price;
 		this.count = count;
-		this.value = price.getPrice() * count;
+		if (price != null) {
+			this.value = price.getPrice() * count;
+		}
 	}
 }

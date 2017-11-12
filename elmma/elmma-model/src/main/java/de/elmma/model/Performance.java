@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Performance extends ArrayList<InvestSnapshot> {
+public class Performance extends ArrayList<Snapshot> {
 	@Override
-	public boolean add(InvestSnapshot e) {
+	public boolean add(Snapshot e) {
 		double change = 0;
 		if (!this.isEmpty()) {
 			change = (e.getValue() - this.get(0).getValue()) / this.get(0).getValue();
@@ -19,7 +19,7 @@ public class Performance extends ArrayList<InvestSnapshot> {
 		return super.add(e);
 	}
 
-	public InvestSnapshot getLatest() {
+	public Snapshot getLatest() {
 		return this.size() == 0 ? null : get(this.size() - 1);
 	}
 }

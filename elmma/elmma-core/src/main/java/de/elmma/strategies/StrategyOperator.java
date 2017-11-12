@@ -28,7 +28,7 @@ public class StrategyOperator {
 		Strategy strategy = Arrays.stream(strategies).filter(s -> s.getSimpleName().equals(strategyName)).iterator()
 				.next().newInstance();
 		strategy.setInvest(invest);
-		PriceDAO.getPrices(from, to).forEach(p -> strategy.onUpdate(p));
+		PriceDAO.getPrices(from, to).forEach(p -> strategy.nextValue(p));
 		return strategy.getPerformance();
 	}
 }

@@ -22,11 +22,15 @@ public class ElmmaModelFactory {
 		return new Price(underlying, datetime, price);
 	}
 
-	public static InvestSnapshot newInvestSnapshot(KnockOutOption newOptionInstance, double count) {
+	public static Snapshot newInvestSnapshot(KnockOutOption newOptionInstance, double count) {
 		return new InvestSnapshot(newOptionInstance, count);
 	}
 
 	public static Performance newPerformance() {
 		return new Performance();
+	}
+
+	public static UninvestSnapshot newUninvestSnapshot(Price price, double value) {
+		return new UninvestSnapshot(price, value);
 	}
 }
