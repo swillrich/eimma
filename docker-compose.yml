@@ -43,6 +43,14 @@ services:
         networks:
             - elmma-nw
             
+    headless:
+        image: selenium/standalone-chrome
+        ports:
+            - "4444:4444"
+        container_name: headless
+        networks:
+            - elmma-nw
+            
     dispatcher:
         build: 
             context: dispatcher
