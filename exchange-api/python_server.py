@@ -14,20 +14,27 @@ import urllib.request
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-tickerFile = open("ticker.txt")
-tickerList = tickerFile.read()
-tickerArr = tickerList.split("\n")
-BASE_URL = "https://www.google.com/finance?q=NASDAQ%3A"
+#tickerFile = open("ticker.txt")
+#tickerList = tickerFile.read()
+#tickerArr = tickerList.split("\n")
+#BASE_URL = "https://www.google.com/finance?q=NASDAQ%3A"
 
-while True:
-    try:
-        driver = webdriver.Remote("http://headless:4444/wd/hub", DesiredCapabilities.CHROME)
-        driver.get("http://www.finanzen.net/index/DAX-Realtime")
-        break;
-    except:
-        print("server http://headless:4444/wd/hub yet down")
+
+counter = 0
+driver = None
+
+def connect():
+    global driver
+    driver = webdriver.Remote("http://headless:4444/wd/hub", DesiredCapabilities.CHROME)
+    driver.get("http://www.finanzen.net/index/DAX-Realtime")
 
 def getRealTimePrices():
+    global counter
+    global driver
+    if counter == 20:
+        counter = 0
+        connect()
+    counter = counter + 1
     pkt = driver.find_elements_by_css_selector('span.push-data')[12].text
     time = driver.find_elements_by_css_selector('span.push-data')[13].text
     return '{"price" : "'+pkt+'","time" : "'+time+'"}' 
@@ -86,7 +93,7 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         
         try:
-            self.wfile.write(getRealTimePrices().encode('utf-8'))
+          self.wfile.write(getRealTimePrices().encode('utf-8'))
 
         except:
           self.wfile.write(traceback.format_exc().encode('utf-8'))
@@ -102,6 +109,16 @@ def run():
   httpd = HTTPServer(server_address, testHTTPServer_RequestHandler)
   print('running server...')
   httpd.serve_forever()
- 
+
+while True:
+    try:
+        print("Trying to connect")
+        connect()
+        break
+    except:
+        print("server http://headless:4444/wd/hub yet down")
+    time.sleep( 5 )
+
+print("Headless server is running")
  
 run()

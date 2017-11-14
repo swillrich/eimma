@@ -43,6 +43,14 @@ services:
         networks:
             - elmma-nw
             
+    headless:
+        image: selenium/standalone-chrome
+        ports:
+            - "4444:4444"
+        container_name: headless
+        networks:
+            - elmma-nw
+            
     dispatcher:
         build: 
             context: dispatcher
@@ -51,7 +59,7 @@ services:
         volumes:
             - /usr/src/app
         ports:
-            - "8081:8081"
+            - "8082:8081"
         container_name: dispatcher
         networks:
             - elmma-nw   

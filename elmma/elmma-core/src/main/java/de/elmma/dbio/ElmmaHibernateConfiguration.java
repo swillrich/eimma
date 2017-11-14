@@ -11,18 +11,31 @@ import de.elmma.model.Price;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 
 public class ElmmaHibernateConfiguration extends Configuration {
+	
+	private static ElmmaHibernateConfiguration instance;
+	private SessionFactory sessionFactory = null;
+	
+	public static ElmmaHibernateConfiguration getInstance() {
+		if (instance == null) {
+			instance = new ElmmaHibernateConfiguration(HBM2DDL_AUTO.UPDATE);
+		}
+		return instance;
+	}
 
 	public static enum HBM2DDL_AUTO {
 		CREATE, UPDATE;
 	}
 
-	public ElmmaHibernateConfiguration(HBM2DDL_AUTO value) {
+	private ElmmaHibernateConfiguration(HBM2DDL_AUTO value) {
 		configure();
 		setProperty("hibernate.hbm2ddl.auto", value.toString().toLowerCase());
 	}
 
 	@Override
 	public SessionFactory buildSessionFactory() {
+		if (sessionFactory != null) {
+			return sessionFactory;
+		}
 		String packageName = Price.class.getPackage().getName();
 		List<String> classNames = new FastClasspathScanner(packageName).scan().getNamesOfAllClasses();
 		String packageNamePrefix = packageName + ".";
@@ -39,7 +52,7 @@ public class ElmmaHibernateConfiguration extends Configuration {
 				}
 			}
 		}
-
-		return super.buildSessionFactory();
+		sessionFactory = super.buildSessionFactory();
+		return sessionFactory;
 	}
 }

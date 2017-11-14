@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import de.elmma.controller.JSONURLReader;
 import de.elmma.dbio.SessionProvider;
+import de.elmma.model.ElmmaModelFactory;
 import de.elmma.model.Price;
 
 @Component
@@ -23,8 +24,11 @@ import de.elmma.model.Price;
  * Kursänderung in die Datenbank zu schreiben, weil wir diese Werte für spätere
  * Analysezwecke widerverwenden wollen.
  * 
+<<<<<<< HEAD
  * @author Erfinderdeck
  *
+=======
+>>>>>>> 44f4f84003fcf3afc981c911fb76608a9f7e8575
  */
 public class IntradayFetcher {
 
@@ -34,7 +38,6 @@ public class IntradayFetcher {
 
 	Price currentPrice = null;
 
-	
 	/**
 	 * hole zu Beginn den letzten Wert als aktuellen Wert aus der DB
 	 */
@@ -47,11 +50,13 @@ public class IntradayFetcher {
 	}
 
 	/**
-	 * hole jede Sekunde (Heartbeat) den "angeblich" neuen Kurs vom fetcher und füge den Kurswert (aber 
-	 * nur bei Veränderung) in die Datenbank hinzu (erster Ansatz: wir errechnen später wie lang sich ein 
-	 * Kurs nict verändert hat, aber speichern nicht jede Sekunde den gleichen Wer ab, um die DB voll zu müllen?!) 
+	 * hole jede Sekunde (Heartbeat) den "angeblich" neuen Kurs vom fetcher und
+	 * füge den Kurswert (aber nur bei Veränderung) in die Datenbank hinzu
+	 * (erster Ansatz: wir errechnen später wie lang sich ein Kurs nict
+	 * verändert hat, aber speichern nicht jede Sekunde den gleichen Wer ab, um
+	 * die DB voll zu müllen?!)
 	 */
-	@Scheduled(fixedRate = 1000)
+	@Scheduled(fixedRate = 5000)
 	private void requestNewPrice() {
 		try {
 			Price price = fetchCurrentPrice();
@@ -66,7 +71,9 @@ public class IntradayFetcher {
 	}
 
 	/**
-	 * Hilfsfunktion, welche den aktuellen Kurswert im heartbeat von der exchange api abholt
+	 * Hilfsfunktion, welche den aktuellen Kurswert im heartbeat von der
+	 * exchange api abholt
+	 * 
 	 * @return
 	 * @throws IOException
 	 * @throws ParseException
@@ -80,6 +87,6 @@ public class IntradayFetcher {
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = format.parse(json.getString("time") + " " + formatDate.format(new Date()));
 
-		return new Price("DAX", date, price);
+		return ElmmaModelFactory.newPrice("DAX", date, price);
 	}
 }

@@ -41,6 +41,7 @@
 							-umlImageFormat PNG
 							-umlImageDirectory ../../diagrams
 							-umlPackageDependencies true
+							-umlIncludePackagePrivateFields true
 							</additionalparam>
 							<useStandardDocletOptions>true</useStandardDocletOptions>
 						</configuration>

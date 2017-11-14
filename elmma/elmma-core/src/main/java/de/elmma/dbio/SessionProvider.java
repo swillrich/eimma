@@ -5,7 +5,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import de.elmma.dbio.ElmmaHibernateConfiguration.HBM2DDL_AUTO;
 import lombok.Data;
 
 /**
@@ -56,11 +55,10 @@ public class SessionProvider {
 		public abstract Object work(Session session);
 
 		public HibernateSessionProvider() {
-			SessionFactory factory = new ElmmaHibernateConfiguration(HBM2DDL_AUTO.UPDATE).buildSessionFactory();
+			SessionFactory factory = ElmmaHibernateConfiguration.getInstance().buildSessionFactory();
 			Session session = factory.openSession();
 			this.result = work(session);
 			session.close();
-			factory.close();
 		}
 	}
 }

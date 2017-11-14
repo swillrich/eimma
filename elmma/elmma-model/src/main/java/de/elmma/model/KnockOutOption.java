@@ -29,29 +29,15 @@ public class KnockOutOption extends Price implements Lifecycle {
 	@Column(name = "credit", nullable = false)
 	double credit;
 
-	public KnockOutOption(String underlyingName, Price trackedUnderlying, Price knockoutBarrier, double price,
-			double multiplier) {
-		set(underlyingName, trackedUnderlying, knockoutBarrier, price, multiplier,
-				trackedUnderlying.getPrice() - price);
-	}
-
-	private void set(String underlyingName, Price trackedUnderlying, Price knockoutBarrier, double price,
-			double multiplier, double credit) {
-		this.underlying = underlyingName;
-		this.datetime = trackedUnderlying.getDatetime();
-		this.price = price;
+	public KnockOutOption(String underlying, Price trackedUnderlying, Price knockOutBarrier, double multiplier) {
+		this.underlying = underlying;
 		this.trackedUnderlying = trackedUnderlying;
-		this.knockoutBarrier = knockoutBarrier;
+		this.knockoutBarrier = knockOutBarrier;
 		this.multiplier = multiplier;
+		this.datetime = trackedUnderlying.getDatetime();
+		this.price = (trackedUnderlying.getPrice() - knockOutBarrier.getPrice()) * multiplier;
+		this.credit = trackedUnderlying.getPrice() - price;
 		this.laverage = (trackedUnderlying.getPrice() * multiplier) / price;
-		this.credit = credit;
-	}
-
-	public KnockOutOption(KnockOutOption previous, Price trackedUnderlying) {
-		this.priceChangeRatio = previous.getLaverage() * trackedUnderlying.getPriceChangeRatio();
-		this.priceChange = previous.getPrice() * this.priceChangeRatio;
-		double newPrice = previous.getPrice() + priceChange;
-		set(previous.getUnderlying(), trackedUnderlying, previous.getKnockoutBarrier(), newPrice,
-				previous.getMultiplier(), previous.getCredit());
+		this.initialize();
 	}
 }
