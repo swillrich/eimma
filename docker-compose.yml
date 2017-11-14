@@ -64,19 +64,6 @@ services:
         networks:
             - elmma-nw   
 
-    botOne:
-        build: 
-            context: botOne
-            dockerfile: Dockerfile
-        image: botOne
-        volumes:
-            - ./botOne:/usr/src/app
-            - ../.m2:/root/.m2
-        ports:
-            - "8082:8082"
-        container_name: botOne
-        networks:
-            - elmma-nw            
         
 networks:
     elmma-nw:
