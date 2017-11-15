@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "hapi": "^16.6.2"
+    "hapi": "^16.6.2",
+    "puppeteer": "^0.13.0"
   }
 }

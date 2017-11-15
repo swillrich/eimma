@@ -13,6 +13,7 @@ import de.elmma.strategies.StrategyOperator;
 /**
  * Führt eine Strategie auf eine bestimmte Dauer mit einem bestimmten Invest aus
  * und gibt das Ergebnis (JSON) zurück.
+ * Hintergrund: ich möchte in einem Zeitraum validieren, ob eine Strategie zu Profit führt.
  */
 @RestController
 @RequestMapping("/strategy")
