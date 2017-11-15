@@ -15,3 +15,8 @@ Services:
 Helper:
 
 1. To do a MySQL dump, connect yourself with the running Docker elmma-db container: `docker exec -it elmma-db bash`, then excecute the following command to dump the database to the (in the docker-compose.yml specified) shared folder (to have access to the file generated): `mysqldump -u elmma --password=123456 elmma > /var/lib/mysql/dump.sql`. After this, you get the dump.sql generated into the host root folder ./mysql.
+
+# Domain Model #
+
+The following picture shows the domain model / database schema of the ELMMa project.
+[link text](src/[master]/elmma/elmma-model/diagram/de.elmma.model.package.png)
