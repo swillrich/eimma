@@ -11,6 +11,12 @@
   "dependencies": {
     "axios": "^0.17.1",
     "cheerio": "^1.0.0-rc.2",
-    "hapi": "^16.6.2"
+    "hapi": "^16.6.2",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.2",
+    "eslint": "^4.11.0",
+    "eslint-config-google": "^0.9.1"
   }
 }
