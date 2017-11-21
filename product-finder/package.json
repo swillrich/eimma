@@ -1,5 +1,5 @@
 {
-  "name": "elmma-exchange-api",
+  "name": "product-finder",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.js",
@@ -9,10 +9,9 @@
   "author": "Erfinderdeck",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.17.1",
-    "cheerio": "^1.0.0-rc.2",
+    "exporter": "0.0.2",
     "hapi": "^16.6.2",
-    "mysql": "^2.15.0"
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.2",

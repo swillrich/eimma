@@ -29,20 +29,6 @@ services:
         container_name: elmma
         networks:
             - elmma-nw
-            
-    dispatcher:
-        build: 
-            context: dispatcher
-            dockerfile: Dockerfile
-        image: dispatcher
-        volumes:
-            - /usr/src/app
-        ports:
-            - "8082:8081"
-        container_name: dispatcher
-        networks:
-            - elmma-nw   
-
         
 networks:
     elmma-nw:
