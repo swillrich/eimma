@@ -2,7 +2,16 @@
 The exchange api gets live values from a DAX websites and writes them to an external
 store so that other services can access it.
 
-## Running In Docker
+## Endpoints
+The scraper will start scraping immediately in an always-on mode. Use `/pause` to pause it
+and `/unpause` to bring it back to live.
+
+## Running locally
+Check the values in config.js and adjust your env vars accordingly. Then simply run:
+
+    node src/app.js
+
+## Running in docker
 If you want to run the server locally you should use docker. Simply bBuild the container:
 
     docker build -t exchangeapi:latest -f devops/Dockerfile .
