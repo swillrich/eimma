@@ -1,10 +1,5 @@
 const Hapi = require('hapi');
 const daxRouter = require('./product-finder.route');
-//const exporter = require('./exporter');
-//const logger = require('./util/logger');
-
-// Make sure the exporter connected prior to starting up the server.
-//exporter.connect();
 
 const server = new Hapi.Server({
   debug: {request: ['error']},
