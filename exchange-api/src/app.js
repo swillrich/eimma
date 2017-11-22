@@ -1,5 +1,5 @@
 const Hapi = require('hapi');
-const daxRouter = require('./dax-finanzen-scraper.route');
+const daxRouter = require('./dax-scraper.route');
 const exporter = require('./exporter');
 const logger = require('./util/logger');
 
@@ -18,8 +18,14 @@ const server = new Hapi.Server({
 server.connection({port: 3210, host: '0.0.0.0'});
 server.route({
     method: 'GET',
-    path: '/',
-    handler: daxRouter.scrapeFinanzenNetDax,
+    path: '/pause',
+    handler: daxRouter.pauseScraping,
+});
+
+server.route({
+    method: 'GET',
+    path: '/unpause',
+    handler: daxRouter.unpauseScraping,
 });
 
 server.route({
@@ -34,3 +40,6 @@ server.start((err) => {
     }
     logger.log(logger.INFO, `Scraper started @3210 (${server.info.uri})`);
 });
+
+// Let's get this party started.
+daxRouter.startScraping();
