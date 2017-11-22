@@ -1,4 +1,3 @@
-'use strict';
 const Hapi = require('hapi');
 const daxRouter = require('./product-finder.route');
 //const exporter = require('./exporter');
@@ -16,7 +15,7 @@ const server = new Hapi.Server({
   },
 });
 
-server.connection({port: 3211, host: '0.0.0.0'});
+server.connection({port: 3211, host: 'localhost'});
 server.route({
     method: 'GET',
     path: '/',
