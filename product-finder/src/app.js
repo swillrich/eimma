@@ -13,7 +13,7 @@ const server = new Hapi.Server({
 server.connection({port: 3211, host: 'localhost'});
 server.route({
     method: 'GET',
-    path: '/',
+    path: '/daxPrice={daxPrice}&minDistance={minDistance}&type={type}&openEnd={openEnd}',
     handler: daxRouter.scrapeProducts,
 });
 
