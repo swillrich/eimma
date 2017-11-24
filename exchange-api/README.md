@@ -16,7 +16,7 @@ If you want to run the server locally you should use docker. Simply bBuild the c
 
     docker build -t exchangeapi:latest -f devops/Dockerfile .
 
-The launch it:
+Then launch it:
 
     docker run -e MYSQL_URL=10.0.75.1 -p 3210:3210 -it exchangeapi:latest
 
